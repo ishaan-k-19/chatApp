@@ -25,8 +25,16 @@ const registerValidator  = ()=>[
           throw new ErrorHandler('This username is already taken, Please try different username', 400);
         }
       }),
+    body("email", "Please Enter Email").notEmpty(),
+    body("email").custom(async value => {
+        const existingUser = await User.find({email: value.toLowerCase()});
+        if (existingUser.length !== 0) {
+
+          throw new ErrorHandler('The user from this email already exists, Please try different email', 400);
+        }
+      }),
     body("bio", "Please Enter Bio").notEmpty(),
-    body("password", "Please Enter Password").notEmpty(),
+    body("password").isLength({ min: 8 }).withMessage('Password must be at least 8 characters long'),
 ];
 
 const updateProfileValidator  = ()=>[
@@ -36,7 +44,7 @@ const updateProfileValidator  = ()=>[
 ];
 
 const loginValidator = ()=>[
-    body("username", "Please Enter UserName").notEmpty(),
+    body("email", "Please Enter Email").notEmpty(),
     body("password", "Please Enter Password").notEmpty()
 ];
 
@@ -56,6 +64,10 @@ const addMembersValidator = ()=>[
 const removeMemberValidator = ()=>[
     body("chatId", "Please Enter Chat ID").notEmpty(),
     body("userId", "Please Enter User ID").notEmpty(),
+];
+const updatePasswordValidator = ()=>[
+    body("oldPassword", "Please Enter Old Password").notEmpty(),
+    body("newPassword").isLength({ min: 8 }).withMessage('Password must be at least 8 characters long')
 ];
 
 const leaveGroupValidator = ()=>[
@@ -91,4 +103,20 @@ const adminLoginValidator = ()=>[
 ]
 
 
-export {registerValidator, validateHandler, loginValidator, newGroupValidator, addMembersValidator, removeMemberValidator, leaveGroupValidator, sendAttachmentsValidator, chtIdValidator, renameGroupValidator, sendRequestValidator, acceptRequestValidator, adminLoginValidator, updateProfileValidator};
+export {
+    registerValidator,
+    validateHandler, 
+    loginValidator, 
+    newGroupValidator, 
+    addMembersValidator, 
+    removeMemberValidator, 
+    leaveGroupValidator, 
+    sendAttachmentsValidator, 
+    chtIdValidator, 
+    renameGroupValidator, 
+    sendRequestValidator, 
+    acceptRequestValidator, 
+    adminLoginValidator, 
+    updateProfileValidator,
+    updatePasswordValidator,
+};

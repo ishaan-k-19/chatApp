@@ -7,7 +7,7 @@ const AvatarCard = ({avatars = [], max = 4}, style) => {
     <div className='flex gap-1'>
         <div max={max}>
             <div className='h-12 w-20' style={style}>
-                <Avatar className='border-white my-1 left-9 absolute shadow-lg'>
+                <Avatar className='border-white left-9 absolute shadow-lg'>
                 <AvatarImage
                 key={Math.random()*100}
                 src={transformImage(avatars[0])} 

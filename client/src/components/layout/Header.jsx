@@ -1,5 +1,6 @@
 import { server } from "@/constants/config";
 import { userNotExists } from "@/redux/reducers/auth";
+import Logo from "@/assets/logo";
 import {
   setIsMobile,
   setIsNewGroup,
@@ -10,6 +11,7 @@ import {
 import axios from "axios";
 import {
   BellIcon,
+  CircleFadingPlusIcon,
   LogOutIcon,
   MenuIcon,
   SearchIcon,
@@ -141,9 +143,13 @@ const Header = () => {
       <Card className="md:mx-3 md:my-2 md:block hidden">
         <CardHeader className="px-9 py-1">
           <CardTitle>
-            <nav className="h-[4rem] text-[#7b39ed] grid grid-cols-12 items-center">
-              <div className="col-span-6 md:col-span-2">
-                <h6 className="text-3xl font-bold hidden md:block">MeChat</h6>
+            <nav className="h-[4rem] grid grid-cols-12 items-center">
+              <div className="col-span-6 md:col-span-2 text-[#6d28d9]">
+                <div className="flex gap-1 items-center">
+                <Logo />
+              <h1 className="text-2xl font-extrabold leading-none tracking-tight md:text-3xl lg:text-4xl dark:text-white">ConvoCube</h1>
+
+                </div>
                 <Button
                   className="shadow-xl rounded-full px-2 md:hidden"
                   variant="icon"
@@ -161,7 +167,7 @@ const Header = () => {
                     />
                     <IconBtn
                       title={"New Group"}
-                      icon={<UserPlus />}
+                      icon={<CircleFadingPlusIcon />}
                       onClick={openNewGroup}
                     />
                     <Link to={"/groups"}>

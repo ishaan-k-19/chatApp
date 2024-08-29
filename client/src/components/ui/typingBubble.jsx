@@ -1,27 +1,24 @@
+import { AtSign } from "lucide-react";
 import React, { useState, useEffect } from "react";
 
-const TypingBubble = () => {
-  const [text, setText] = useState("Typing.");
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setText((prev) =>
-        prev === "Typing."
-          ? "Typing.."
-          : prev === "Typing.."
-          ? "Typing..."
-          : "Typing."
-      );
-    }, 405);
-
-    return () => clearInterval(interval);
-  }, []);
+const TypingBubble = ({user, group}) => {
 
   return (
-    <div className="flex items-start gap-2.5">
-      <div className="flex flex-col w-[100px] max-w-[320px] leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-e-xl rounded-es-xl dark:bg-neutral-600 opacity-60 text-neutral-500 dark:text-neutral-300 mt-1">
-        <p className="text-lg animate-pulse">{text}</p>
-      </div>
+    <div className="flex items-center gap-1 absolute bottom-0">
+      <div className="h-[5px] w-[5px] bg-neutral-500 rounded-full animate-bounce duration-500"/>
+      <div className="h-[5px] w-[5px] bg-neutral-500 rounded-full animate-bounce duration-700"/>
+      <div className="h-[5px] w-[5px] bg-neutral-500 rounded-full animate-bounce duration-1000"/>
+      {
+        group ? (
+          <div className="flex text-neutral-500 items-center animate-pulse text-sm">
+            <AtSign size={12}/>
+            <p >{user?.username}</p>
+          </div>
+        ) : (
+          <p className="animate-pulse text-sm text-neutral-500">{user?.name}</p>
+        )
+      }
+        <p className="animate-pulse text-sm text-neutral-500"> is typing</p>
     </div>
   );
 };

@@ -61,6 +61,42 @@ const api = createApi({
             }),
             invalidatesTags: ["User"],
         }),
+        verifyUser : builder.mutation({
+            query: (data) => ({
+                url: 'user/verify', 
+                method: 'POST',
+                credentials: "include",
+                body: data,
+            }),
+            invalidatesTags: ["User"],
+        }),
+        forgotPassword : builder.mutation({
+            query: (data) => ({
+                url: 'user/forgetpassword', 
+                method: 'POST',
+                credentials: "include",
+                body: data,
+            }),
+            invalidatesTags: ["User"],
+        }),
+        resetPassword : builder.mutation({
+            query: (data) => ({
+                url: 'user/resetpassword', 
+                method: 'PUT',
+                credentials: "include",
+                body: data,
+            }),
+            invalidatesTags: ["User"],
+        }),
+        updatePassword : builder.mutation({
+            query: (data) => ({
+                url: 'user/me/updatepassword', 
+                method: 'PUT',
+                credentials: "include",
+                body: data,
+            }),
+            invalidatesTags: ["User"],
+        }),
         acceptFriendRequest: builder.mutation({
             query: (data) => ({
                 url: 'user/acceptrequest', 
@@ -170,4 +206,8 @@ export const {
     useDeleteChatMutation,
     useLeaveGroupMutation,
     useGroupDetailsQuery,
+    useVerifyUserMutation,
+    useForgotPasswordMutation,
+    useResetPasswordMutation,
+    useUpdatePasswordMutation,
 } = api;

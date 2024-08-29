@@ -21,7 +21,7 @@ const connectDB = (uri) => {
 
 const sendToken = (res, user, code, message) =>{
 
-    const token = jwt.sign({ id: user._id}, process.env.JWT_SECRET);
+    const token = user.getJWTToken();
 
     return res.status(code).cookie("chatapp-token", token, cookieOptions).json({
         success: true,

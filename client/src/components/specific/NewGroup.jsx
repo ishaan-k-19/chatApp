@@ -100,7 +100,7 @@ const NewGroup = () => {
       <DialogContent className="flex items-center flex-col">
         <DialogHeader className={"w-full"}>
             <DialogTitle className="text-center py-5 flex flex-col">
-              <h5 className="text-3xl mb-5">New Group</h5>
+              <h1 className="text-3xl mb-5">New Group</h1>
               <div className="flex justify-center items-center">
                   <Button
                     className=" relative rounded-full bg-opacity-80 cursor-pointer px-0"
@@ -114,9 +114,9 @@ const NewGroup = () => {
                       alt="Avatar Preview"
                     />
                   ) : (
-                    <CircleIcon size={45} strokeWidth={1}/>
+                    <CircleIcon size={45} strokeWidth={1} stroke="#a3a3a3"/>
                   )}
-                    <CameraIcon className=" absolute bg-slate-900 bg-opacity-70 p-1 rounded-full" />
+                    <CameraIcon className=" absolute dark:bg-slate-900 bg-opacity-70 bg-neutral-400 p-1 rounded-full" />
                     <input
                       className="cursor-pointer border-none h-[1px] p-[10px] overflow-hidden whitespace-nowrap w-[1px] absolute opacity-0"
                       id="picture"

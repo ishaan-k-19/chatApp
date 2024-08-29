@@ -7,12 +7,15 @@ import axios from "axios";
 import {
   ArrowLeft,
   AtSign,
+  AtSignIcon,
   Calendar,
   CameraIcon,
   CheckIcon,
+  MailIcon,
   MessageSquareText,
   PenBoxIcon,
   UserIcon,
+  UserRound,
   UsersIcon,
 } from "lucide-react";
 import moment from "moment";
@@ -24,10 +27,23 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { server } from "@/constants/config";
 import { useNavigate } from "react-router-dom";
+import ChangePasswordDialog from "../dialog/ChangePasswordDialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import UserItem from "../shared/UserItem";
+import { ScrollArea } from "../ui/scroll-area";
+import { Separator } from "../ui/separator";
 
 const Profile = ({ user, otherUser, chatId }) => {
   const [isEdit, setIsEdit] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
   const avatar = useFileHandler("single");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -45,11 +61,15 @@ const Profile = ({ user, otherUser, chatId }) => {
     username: mainUser?.username,
   });
 
+  const membersDialogHandler = () => {
+    setOpenDialog(true);
+    console.log("clicked");
+  };
+
   const handleEditProfile = async (data) => {
     setIsEdit(false);
     const toastId = toast.loading("Updating Profile...");
     setIsLoading(true);
-
 
     const formData = new FormData();
     if (avatar.file) {
@@ -77,13 +97,13 @@ const Profile = ({ user, otherUser, chatId }) => {
       toast.success(response.data.message, { id: toastId });
       dispatch(userExists(response.data.user));
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Something went wrong", { id: toastId });
+      toast.error(error?.response?.data?.message || "Something went wrong", {
+        id: toastId,
+      });
     } finally {
       setIsLoading(false);
     }
   };
-
-
 
   return (
     <>
@@ -98,9 +118,11 @@ const Profile = ({ user, otherUser, chatId }) => {
                 {edit ? (
                   <div className="flex justify-between">
                     Edit Profile
-                    <Button type="submit" variant="icon" disabled={isLoading}>
-                      <CheckIcon />
-                    </Button>
+                    <div className="flex items-center gap-5">
+                      <Button type="submit" variant="icon" disabled={isLoading}>
+                        <CheckIcon />
+                      </Button>
+                    </div>
                   </div>
                 ) : (
                   <>Profile</>
@@ -108,7 +130,7 @@ const Profile = ({ user, otherUser, chatId }) => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-col gap-4 xl:gap-8 items-center mt-4">
+              <div className="flex flex-col gap-8 md:gap-10 xl:gap-8 items-center mt-4 justify-center">
                 <div className="flex flex-col items-center justify-center relative">
                   {avatar.preview ? (
                     <img
@@ -117,7 +139,7 @@ const Profile = ({ user, otherUser, chatId }) => {
                       alt="Avatar Preview"
                     />
                   ) : (
-                    <Avatar className="w-[180px] h-[180px] object-cover my-4 shadow-lg">
+                    <Avatar className="w-[150px] h-[150px] object-cover my-4 shadow-lg">
                       <AvatarImage
                         className="object-cover"
                         src={transformImage(mainUser?.avatar?.url, 500)}
@@ -127,8 +149,9 @@ const Profile = ({ user, otherUser, chatId }) => {
                   <Button
                     className="absolute bottom-13 px-9 py-12 right-13 bg-slate-700 rounded-full bg-opacity-60 cursor-pointer hover:bg-gray-300"
                     variant="icon"
+                    type="button" // Change to type="button"
                   >
-                    <CameraIcon className="font-bold" />
+                    <CameraIcon className="font-bold text-neutral-300" />
                     <input
                       className="cursor-pointer px-20 py-24 border-none h-[1px] p-[10px] overflow-hidden whitespace-nowrap w-[1px] absolute opacity-0"
                       id="picture"
@@ -139,9 +162,10 @@ const Profile = ({ user, otherUser, chatId }) => {
                 </div>
                 <ProfileCard
                   heading={"Username"}
+                  show={true}
                   element={
                     <input
-                      className={"border mx-2 rounded-sm py-1 text-center dark:bg-neutral-900 dark:text-white dark:border-neutral-700bg-neutral-100"}
+                      className="border mx-2 rounded-sm py-1 text-center dark:bg-neutral-900 dark:text-white dark:border-neutral-700 bg-neutral-100"
                       type="text"
                       {...register("username")}
                       defaultValue={userData.username}
@@ -153,10 +177,11 @@ const Profile = ({ user, otherUser, chatId }) => {
                   Icon={<AtSign />}
                 />
                 <ProfileCard
+                  show={true}
                   heading={"Name"}
                   element={
                     <input
-                      className={"border mx-2 rounded-sm py-1 text-center dark:bg-neutral-900 dark:text-white dark:border-neutral-700 bg-neutral-100"}
+                      className="border mx-2 rounded-sm py-1 text-center dark:bg-neutral-900 dark:text-white dark:border-neutral-700 bg-neutral-100"
                       type="text"
                       {...register("name")}
                       defaultValue={userData.name}
@@ -169,9 +194,10 @@ const Profile = ({ user, otherUser, chatId }) => {
                 />
                 <ProfileCard
                   heading={"Bio"}
+                  show={true}
                   element={
                     <input
-                      className={"border mx-2 rounded-sm py-1 text-center dark:bg-neutral-900 dark:text-white dark:border-neutral-700 bg-neutral-100"}
+                      className="border mx-2 rounded-sm py-1 text-center dark:bg-neutral-900 dark:text-white dark:border-neutral-700 bg-neutral-100"
                       type="text"
                       {...register("bio")}
                       defaultValue={userData.bio}
@@ -182,13 +208,9 @@ const Profile = ({ user, otherUser, chatId }) => {
                   }
                   Icon={<MessageSquareText />}
                 />
-                <ProfileCard
-                  heading={"Joined"}
-                  element={moment(mainUser?.createdAt).fromNow()}
-                  Icon={<Calendar />}
-                />
               </div>
             </CardContent>
+            <ChangePasswordDialog />
           </form>
         </Card>
       ) : isGroup ? (
@@ -200,7 +222,9 @@ const Profile = ({ user, otherUser, chatId }) => {
                   <Button
                     className="rounded-full px-2 md:hidden block"
                     variant="icons"
-                    onClick={()=>{dispatch(setIsProfile(false));}}
+                    onClick={() => {
+                      dispatch(setIsProfile(false));
+                    }}
                   >
                     <ArrowLeft />
                   </Button>
@@ -210,7 +234,7 @@ const Profile = ({ user, otherUser, chatId }) => {
             </CardHeader>
             <CardContent>
               <div className="flex flex-col gap-4 xl:gap-8 items-center mt-4">
-                <Avatar className="w-[180px] h-[180px] object-cover my-4 shadow-lg">
+                <Avatar className="w-[150px] h-[150px] object-cover my-4 shadow-lg">
                   <a href={mainUser?.avatar?.url} target="blank">
                     <AvatarImage
                       className="object-cover"
@@ -218,14 +242,18 @@ const Profile = ({ user, otherUser, chatId }) => {
                     />
                   </a>
                 </Avatar>
-                <ProfileCard heading={"Group Name"} element={mainUser?.name} />
+                <ProfileCard
+                  heading={"Group Name"}
+                  element={mainUser?.name}
+                  Icon={<UserRound />}
+                />
                 <ProfileCard
                   heading={"Admin"}
                   element={mainUser?.creator?.username}
                   Icon={
-                    <Avatar className="h-[40px] w-[40px]">
+                    <Avatar className="h-[30px] w-[30px]">
                       <AvatarImage
-                        className="object-cover"
+                        className="object-cover shadow-lg"
                         src={transformImage(
                           mainUser?.creator?.avatar?.url,
                           500
@@ -238,6 +266,7 @@ const Profile = ({ user, otherUser, chatId }) => {
                   heading={"Participiants"}
                   element={`${mainUser?.members?.length} Members`}
                   Icon={<UsersIcon />}
+                  handler={membersDialogHandler}
                 />
                 <ProfileCard
                   heading={"Created"}
@@ -254,32 +283,35 @@ const Profile = ({ user, otherUser, chatId }) => {
             <CardHeader>
               <CardTitle>
                 <div className="flex gap-2 items-center">
-                  
                   {edit ? (
                     <>
-                    <Button
-                    className="rounded-full px-2 md:hidden block"
-                    variant="icons"
-                    onClick={()=>{navigate("/")}}
-                  >
-                    <ArrowLeft />
-                  </Button>
-                    <div className="flex justify-between items-center">
-                      Profile
-                      <Button variant="icon" onClick={() => setIsEdit(true)}>
-                        <PenBoxIcon />
+                      <Button
+                        className="rounded-full px-2 md:hidden block"
+                        variant="icons"
+                        onClick={() => {
+                          navigate("/");
+                        }}
+                      >
+                        <ArrowLeft />
                       </Button>
-                    </div>
+                      <div className="flex justify-between items-center">
+                        Profile
+                        <Button variant="icon" onClick={() => setIsEdit(true)}>
+                          <PenBoxIcon />
+                        </Button>
+                      </div>
                     </>
                   ) : (
                     <>
-                    <Button
-                    className="rounded-full px-2 md:hidden block"
-                    variant="icons"
-                    onClick={()=>{dispatch(setIsProfile(false));}}
-                  >
-                    <ArrowLeft />
-                  </Button>
+                      <Button
+                        className="rounded-full px-2 md:hidden block"
+                        variant="icons"
+                        onClick={() => {
+                          dispatch(setIsProfile(false));
+                        }}
+                      >
+                        <ArrowLeft />
+                      </Button>
                       Profile
                     </>
                   )}
@@ -287,8 +319,8 @@ const Profile = ({ user, otherUser, chatId }) => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-col gap-4 xl:gap-8 items-center mt-4">
-                <Avatar className="w-[180px] h-[180px] object-cover my-4 shadow-lg">
+              <div className="flex flex-col gap-10 md:gap-4 xl:gap-6 items-center mt-4">
+                <Avatar className="w-[150px] h-[150px] object-cover my-4 shadow-lg">
                   <a href={mainUser?.avatar?.url} target="blank">
                     <AvatarImage
                       className="object-cover"
@@ -300,39 +332,124 @@ const Profile = ({ user, otherUser, chatId }) => {
                   heading={"Username"}
                   element={mainUser?.username}
                   Icon={<AtSign />}
+                  show={edit}
                 />
                 <ProfileCard
                   heading={"Name"}
                   element={mainUser?.name}
                   Icon={<UserIcon />}
+                  show={edit}
                 />
                 <ProfileCard
                   heading={"Bio"}
                   element={mainUser?.bio}
                   Icon={<MessageSquareText />}
+                  show={edit}
                 />
+                {edit && (
+                  <ProfileCard
+                    heading={"Email"}
+                    element={mainUser?.email}
+                    Icon={<MailIcon />}
+                    show={edit}
+                  />
+                )}
                 <ProfileCard
                   heading={"Joined"}
                   element={moment(mainUser?.createdAt).fromNow()}
                   Icon={<Calendar />}
+                  show={edit}
                 />
               </div>
             </CardContent>
           </Card>
         </>
       )}
+      <MembersDialog
+        openDialog={openDialog}
+        setOpenDialog={setOpenDialog}
+        user={mainUser}
+      />
     </>
   );
 };
 
-const ProfileCard = ({ element, Icon, heading }) => (
-  <div className="flex items-center gap-4 text-center md:mt-0 mt-8">
-    {Icon && Icon}
+const ProfileCard = ({ element, Icon, heading, handler, show = false }) => (
+  <Button
+    className="grid grid-cols-3 items-center md:w-2/3 cursor-default gap-24 md:gap-5 2xl:gap-0"
+    variant="icon"
+    onClick={handler}
+    type="button"
+  >
+    <div className="flex justify-center md:justify-center">{Icon && Icon}</div>
     <div className="flex flex-col">
-      <p className="text-lg">{element}</p>
-      <p className="text-sm text-neutral-400">{heading}</p>
+      <div className="flex flex-col items-center">
+        <p
+          className={`${
+            show
+              ? "text-lg"
+              : "text-lg max-w-none overflow-visible md:max-w-[9ch] md:overflow-hidden md:whitespace-nowrap md:text-ellipsis"
+          }`}
+        >
+          {element}
+        </p>
+        <p className="text-sm text-neutral-400">{heading}</p>
+      </div>
     </div>
-  </div>
+  </Button>
 );
+
+const MembersDialog = ({ openDialog, setOpenDialog, user }) => {
+  const closeHandler = () => {
+    setOpenDialog(false);
+  };
+
+  return (
+    <Dialog open={openDialog} onOpenChange={closeHandler}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="text-2xl">{user.name} Group</DialogTitle>
+        </DialogHeader>
+        <div className="text-lg font-bold text-neutral-500">
+          Total Members: {user?.members?.length}
+        </div>
+        <Separator />
+        <div className="list-none flex flex-col items-center w-full">
+          <ScrollArea className="h-[47svh] 2xl:h-[50svh] scroll-smooth w-full px-3">
+            {user?.members
+              ?.slice()
+              .reverse()
+              .map((i) => (
+                <>
+                  <div className="flex gap-10 items-center p-2 mt-1">
+                    <Avatar className="h-[50px] w-[50px]">
+                      <AvatarImage
+                        className="object-cover shadow-lg"
+                        src={transformImage(i?.avatar?.url, 500)}
+                      />
+                    </Avatar>
+                    <div className="flex items-center justify-between w-full">
+                      <div className="flex-col">
+                        <p>{i?.name}</p>
+                        <div className="flex gap-[2px] items-center dark:text-neutral-500 text-neutral-400">
+                          <AtSignIcon size={13} />
+                          <p>{i?.username}</p>
+                        </div>
+                      </div>
+                      {user?.creator?._id === i._id ? (
+                        <p className=" dark:text-neutral-400 border px-3 py-1 rounded-sm bg-neutral-200 text-neutral-500 dark:bg-neutral-900 dark:border-neutral-900">
+                          Admin
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+                </>
+              ))}
+          </ScrollArea>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 export default Profile;

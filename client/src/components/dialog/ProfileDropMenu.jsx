@@ -31,7 +31,7 @@ const ProfileDropMenu = ( {isGroup}) => {
     return (
         <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="shadow-xl rounded-full px-2" variant="icon">
+          <Button className="dark:shadow-xl rounded-full px-2" variant="icon">
             <EllipsisVertical size={21}/>
           </Button>
         </DropdownMenuTrigger>

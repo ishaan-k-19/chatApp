@@ -67,7 +67,9 @@ io.use((socket, next)=>{
     cookieParser()(
         socket.request, 
         socket.request.res, 
-        async (err)=>await socketAuthenticator(err, socket, next)
+        async (err)=>{ 
+          await socketAuthenticator(err, socket, next)
+        }
     );
 })
 
@@ -82,6 +84,8 @@ io.on("connection", (socket) => {
       sender: {
         _id: user._id,
         name: user.name,
+        username: user.username,
+        avatar: user.avatar,
       },
       chat: chatId,
       createdAt: new Date().toISOString(),
@@ -107,9 +111,9 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on(START_TYPING, ({ members, chatId }) => {
+  socket.on(START_TYPING, ({ members, chatId, user }) => {
     const membersSockets = getSockets(members);
-    socket.to(membersSockets).emit(START_TYPING, { chatId });
+    socket.to(membersSockets).emit(START_TYPING, { chatId, user });
   });
 
   socket.on(STOP_TYPING, ({ members, chatId }) => {

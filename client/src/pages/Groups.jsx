@@ -386,6 +386,7 @@ const Groups = () => {
                                 }
                           }
                           handler={removeMemberHandler}
+                          usern={true}
                         />
                       ))
                     )}

@@ -12,6 +12,8 @@ import Title from "../shared/Title";
 import ChatList from "../specific/ChatList";
 import Profile from "../specific/Profile";
 import Header from "./Header";
+import OtpDialog from "../dialog/OtpDialog";
+
 
 const AppLayout = () => (WrappedComponent) => {
   return (props) => {
@@ -49,8 +51,6 @@ const AppLayout = () => (WrappedComponent) => {
       dispatch(setSelectedDeleteChat({chatId, groupChat}))
     };
 
-    const handleMobileClose = () => dispatch(setIsMobile(false));
-
     
     const newRequestListener = useCallback(()=> {
       dispatch(incrementNotification());
@@ -60,7 +60,6 @@ const AppLayout = () => (WrappedComponent) => {
     const refetchListener = useCallback(()=> {
       refetch();
       navigate("/")
-
     }, [refetch, navigate]);
 
     const newMessagesAlertListener = useCallback(
@@ -99,6 +98,7 @@ const AppLayout = () => (WrappedComponent) => {
 
     return (
       <>
+      <OtpDialog verfied={user.verified}/>
         <Title />
         <div className="hidden md:block">
         <Header/>
@@ -140,5 +140,7 @@ const AppLayout = () => (WrappedComponent) => {
     );
   };
 };
+
+
 
 export default AppLayout;

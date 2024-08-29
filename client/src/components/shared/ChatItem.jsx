@@ -11,15 +11,13 @@ const ChatItem = ({
   sameSender,
   isOnline,
   newMessageAlert,
-  index = 0,
-  handleDeleteChat,
 }) => {
 
   const {theme, systemTheme} = useTheme();
 
 
   return (
-    <Link className='hover:bg-[#7b39ed] hover:bg-opacity-45 rounded-lg mx-2' to={`/chat/${_id}`} onContextMenu={(e) => handleDeleteChat(e, _id, groupChat)}>
+    <Link className='hover:bg-[#7b39ed] hover:bg-opacity-45 rounded-lg mx-2' to={`/chat/${_id}`}>
       <div
         className='rounded-lg'
         style={{

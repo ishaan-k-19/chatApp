@@ -8,10 +8,10 @@ export const Link = styled(LinkComponent)`
 `
 
 export const InputBox = styled("input")`
-    widht: 100%
-    height: "100%"
+    widht: 100%;
+    height: "100%";
     border: none;
-    otuline: none;
+    outline: none;
     margin:  0;
     padding: 8px 4rem;
     border-radius: 1.5rem;

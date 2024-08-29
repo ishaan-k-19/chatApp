@@ -22,6 +22,12 @@ const initialState = {
       incrementNotification: (state) => {
         state.notificationCount += 1;
       },
+      decrementNotification: (state) => {
+        state.notificationCount -= 1;
+        if (state.notificationCount < 0) {
+          state.notificationCount = 0;
+        }
+      },
       resetNotificationCount: (state) => {
         state.notificationCount = 0;
       },
@@ -55,6 +61,7 @@ const initialState = {
   export const {
     incrementNotification,
     resetNotificationCount,
+    decrementNotification,
     setNewMessagesAlert,
     removeNewMessagesAlert,
   } = chatSlice.actions;

@@ -62,6 +62,7 @@ const getMyChats = TryCatch(async (req, res, next) => {
 
         const otherMember = getOtherMembers(members, req.user);
 
+
         return {
             _id,
             groupChat,
@@ -278,6 +279,8 @@ const sendAttachments = TryCatch(async (req, res, next) => {
         sender: {
             _id: me._id,
             name: me.name,
+            username: me.username,
+            avatar: me.avatar,
         },
     };
 
@@ -440,7 +443,7 @@ const getMessages = TryCatch(async (req, res, next) => {
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(resultPerPage)
-        .populate("sender", "name")
+        .populate("sender", "name username avatar.url")
         .lean(),
         Message.countDocuments({ chat: chatId }),
     ]);

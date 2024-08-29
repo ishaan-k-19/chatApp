@@ -15,6 +15,7 @@ import {
 } from "../ui/dialog";
 import { Skeleton } from '../ui/skeleton';
 import { ChatListSkeleton } from '../ui/chatListSkeleton';
+import { decrementNotification } from '@/redux/reducers/chat';
 
 const Notifications = () => {
 
@@ -28,7 +29,7 @@ const Notifications = () => {
 
   const friendRequestHandler = async ({_id, accept}) =>{
     dispatch(setIsNotification(false));
-
+    dispatch(decrementNotification());
     await acceptRequest("Accepting...", { requestId: _id, accept: accept });
   }
 

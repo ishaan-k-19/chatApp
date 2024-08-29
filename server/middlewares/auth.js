@@ -29,7 +29,8 @@ const isAuthenticated = TryCatch((req, res, next) => {
 
     const decodedData = jwt.verify(token, process.env.JWT_SECRET);
 
-    req.user = decodedData.id;
+    req.user = decodedData._id;
+
 
     next();
 
@@ -41,14 +42,14 @@ const socketAuthenticator = async (err, socket, next) =>{
             return next(err);
         }
 
+        
         const authToken = socket.request.cookies[CHATAPP_TOKEN];
-
+        
         if(!authToken) return next(new ErrorHandler("Please login to continue", 401));
-
+        
         const  decodedData = jwt.verify(authToken, process.env.JWT_SECRET);
 
-
-        const user = await User.findById(decodedData.id);
+        const user = await User.findById(decodedData._id);
 
         if(!user) return next(new ErrorHandler("Please login to continue", 401));
 

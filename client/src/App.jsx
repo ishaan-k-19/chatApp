@@ -52,11 +52,12 @@ function App() {
             </SocketProvider>}>
               <Route path="/" element={<Home />} />
               <Route path="/chat/:chatId" element={<Chat />} />
-              <Route path="/groups" element={<Groups />} />
-              <Route path="/profile" element={<Profile user={user}/>} />
+              <Route path="/groups" element={<Groups />} title="ConvocCube - Groups" />
+              <Route path="/profile" element={<Profile user={user}/>} title="ConvoCube - Profile" />
             </Route>
             <Route
               path="/login"
+              title="ConvoCube-Login"
               element={
                 <ProtectRoute user={!user} redirect="/">
                   <Login />

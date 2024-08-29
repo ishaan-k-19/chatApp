@@ -8,31 +8,6 @@ import { dashboardData } from "@/constants/sampleData";
 import { useErrors } from "@/hooks/hooks";
 import { transformImage } from "@/lib/features";
 import { useEffect, useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button";
-
-const MemberDialog = () =>{<Dialog>
-  <DialogTrigger></DialogTrigger>
-  <DialogContent>
-    <DialogHeader>
-      <DialogTitle>Are you absolutely sure?</DialogTitle>
-      <DialogDescription>
-        This action cannot be undone. This will permanently delete your account
-        and remove your data from our servers.
-      </DialogDescription>
-    </DialogHeader>
-  </DialogContent>
-</Dialog>
-
-}
 
 const columns = [
   {

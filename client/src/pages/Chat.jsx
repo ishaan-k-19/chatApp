@@ -31,7 +31,7 @@ import { useChatDetailsQuery, useGetMessagesQuery } from "@/redux/api/api";
 import { removeNewMessagesAlert } from "@/redux/reducers/chat";
 import { setIsFileMenu } from "@/redux/reducers/misc";
 import { getSocket } from "@/socket";
-import { ArrowLeft, EllipsisVertical, SendIcon } from "lucide-react";
+import { ArrowLeft, AtSignIcon, EllipsisVertical, SendIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -46,6 +46,7 @@ const Chat = ({ chatId, user, otherUser }) => {
 
   const [IamTyping, setIamTyping] = useState(false);
   const [userTyping, setUserTyping] = useState(false);
+  const [ senderTyping, setSenderTyping] = useState("");
 
 
   const typingTimeout = useRef(null);
@@ -83,7 +84,8 @@ const Chat = ({ chatId, user, otherUser }) => {
     setMessage(e.target.value);
 
     if (!IamTyping) {
-      socket.emit(START_TYPING, { members, chatId });
+
+      socket.emit(START_TYPING, { members, chatId, user});
       setIamTyping(true);
     }
 
@@ -92,7 +94,7 @@ const Chat = ({ chatId, user, otherUser }) => {
     typingTimeout.current = setTimeout(() => {
       socket.emit(STOP_TYPING, { members, chatId });
       setIamTyping(false);
-    }, [2000]);
+    }, [3000]);
   };
 
   const submitHandler = (e) => {
@@ -103,6 +105,10 @@ const Chat = ({ chatId, user, otherUser }) => {
     // Emitting messages to the server
     socket.emit(NEW_MESSAGE, { chatId, members, message });
     setMessage("");
+    typingTimeout.current = setTimeout(() => {
+      socket.emit(STOP_TYPING, { members, chatId });
+      setIamTyping(false);
+    }, [0]);
   };
 
   const navigateBack = () => {
@@ -149,6 +155,7 @@ const Chat = ({ chatId, user, otherUser }) => {
     (data) => {
       if (data.chatId !== chatId) return;
       setUserTyping(true);
+      setSenderTyping(data?.user);
     },
     [chatId]
   );
@@ -157,6 +164,7 @@ const Chat = ({ chatId, user, otherUser }) => {
     (data) => {
       if (data.chatId !== chatId) return;
       setUserTyping(false);
+      setSenderTyping("");
     },
     [chatId]
   );
@@ -169,6 +177,7 @@ const Chat = ({ chatId, user, otherUser }) => {
         sender: {
           _id: "dsadasdasdasdasdas",
           name: "Admin",
+          avatar: "https://example.com/admin-avatar.jpg",
         },
         chat: chatId,
         createdAt: new Date().toISOString(),
@@ -228,21 +237,28 @@ const Chat = ({ chatId, user, otherUser }) => {
             <Avatar className='object-cover shadow-lg border'>
                 <AvatarImage className='object-cover' src={transformImage(otherUser?.avatar?.url)}/>
             </Avatar>
+            <div>
             {otherUser?.name}
+            {!isGroup && <div className="flex text-[12px] items-center gap-[2px] -mt-1 text-neutral-400">
+              <AtSignIcon size={12}/>
+              {otherUser?.username}
+            </div>}
+
+            </div>
             </div>
             <ProfileDropMenu toggle={<EllipsisVertical size={21}/>} isGroup={isGroup} chatId={chatId}/>
             </CardTitle>
         </CardHeader>
         <CardContent className="px-2">
-          <ScrollArea className="h-[81svh] md:h-[69svh] 2xl:h-[73svh] px-3 py-2">
+          <ScrollArea className="h-[83svh] md:h-[69svh] 2xl:h-[73svh] px-3 py-5">
             <div ref={containerRef} className="flex flex-col overflow-y-auto overflow-x-hidden">
               {allMessages.map((i) => (
-                <MessageComponent key={i._id} message={i} user={user} />
+                <MessageComponent key={i._id} message={i} user={user} group={isGroup}/>
               ))}
-              {userTyping && <TypingBubble/>}
               <div ref={bottomRef} />
             </div>
             <ScrollBar orientation="vertical" />
+        {userTyping && <TypingBubble user={senderTyping} group={isGroup}/>}
           </ScrollArea>
         </CardContent>
         <CardFooter className="px-4">

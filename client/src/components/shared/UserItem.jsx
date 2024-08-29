@@ -1,14 +1,14 @@
 
 import { transformImage } from '@/lib/features'
-import { MinusIcon, PlusIcon } from 'lucide-react'
+import { AtSignIcon, MinusIcon, PlusIcon } from 'lucide-react'
 import { memo } from 'react'
 import { Avatar, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 
 
 
-const UserItem = ({user, handler, handlerIsLoading, isAdded = false, styling}) => {
-    const {name, _id, avatar} = user
+const UserItem = ({user, handler, handlerIsLoading, isAdded = false, styling, usern=false}) => {
+    const {name, _id, avatar, username} = user
     const newAvatar = avatar.url ? avatar.url : avatar
 
   return (
@@ -18,7 +18,13 @@ const UserItem = ({user, handler, handlerIsLoading, isAdded = false, styling}) =
             <Avatar className='object-cover my-4 shadow-lg border'>
                 <AvatarImage className='object-cover' src={transformImage(newAvatar)}/>
             </Avatar>
+            <div className='-space-y-1'>
             <p className='text-lg grow overflow-hidden' style={{display: "-webkit-box", WebkitLineClamp:1, WebkitBoxOrient:"vertical"}}>{name}</p>
+            {usern && <div className='flex gap-[1px] items-center dark:text-neutral-600 text-neutral-400 text-sm'>
+            <AtSignIcon size={10} className=''/>
+            <p>{username}</p>
+            </div>}
+            </div>
             </div>
 
             <Button className='px-2 rounded-full' onClick={()=>handler(_id)} disabled={handlerIsLoading} variant={isAdded ? "destructive": ""}>
