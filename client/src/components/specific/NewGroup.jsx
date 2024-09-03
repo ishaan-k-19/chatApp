@@ -99,7 +99,7 @@ const NewGroup = () => {
     <Dialog open={isNewGroup} onOpenChange={closeHandler}>
       <DialogContent className="flex items-center flex-col">
         <DialogHeader className={"w-full"}>
-            <DialogTitle className="text-center py-5 flex flex-col">
+            <DialogTitle className="text-center md:py-5 py-1 flex flex-col">
               <h1 className="text-3xl mb-5">New Group</h1>
               <div className="flex justify-center items-center">
                   <Button
@@ -138,7 +138,7 @@ const NewGroup = () => {
               {isLoading ? (
                 <ChatListSkeleton />
               ) : (
-                <ScrollArea className="h-[37svh] 2xl:h-[40svh] scroll-smooth">
+                <ScrollArea className="h-[calc(100svh-25.8rem)] md:h-[calc(100vh-27.5rem)] scroll-smooth">
                   {data?.friends.map((i) => (
                     <div className="px-4">
                       <UserItem

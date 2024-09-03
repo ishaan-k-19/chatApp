@@ -16,6 +16,7 @@ import {
 import { Skeleton } from '../ui/skeleton';
 import { ChatListSkeleton } from '../ui/chatListSkeleton';
 import { decrementNotification } from '@/redux/reducers/chat';
+import { ScrollArea } from '../ui/scroll-area';
 
 const Notifications = () => {
 
@@ -45,22 +46,24 @@ const Notifications = () => {
             <DialogTitle className="text-center text-3xl py-5">
               Notifications
             </DialogTitle>
-            <DialogDescription className="w-[90%] overflow-y-auto h-[47svh] 2xl:h-[50svh] scroll-smooth">
+            <DialogDescription className="w-full list-none">
               {
                 isLoading? (
                   <ChatListSkeleton />
                 ): (
+                  <ScrollArea className="h-[calc(100svh-20.5rem)] md:h-[calc(100vh-20rem)] scroll-smooth px-3">
                   <>
                   {
-                data?.allRequests.length > 0 ? (
-                  data?.allRequests?.map((i)=><NotificationItem 
-                  sender={i.sender} 
-                  _id={i._id} 
-                  handler={friendRequestHandler} 
-                  key={i._id}/>)
-                ) : <p className='text-center'>0 Notifications</p>
-              }
+                    data?.allRequests.length > 0 ? (
+                      data?.allRequests?.map((i)=><NotificationItem 
+                      sender={i.sender} 
+                      _id={i._id} 
+                      handler={friendRequestHandler} 
+                      key={i._id}/>)
+                    ) : <p className='text-center'>0 Notifications</p>
+                  }
                   </>
+              </ScrollArea>
                 )
               }
             </DialogDescription>

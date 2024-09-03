@@ -30,6 +30,7 @@ import toast from "react-hot-toast";
 import { useAsyncMutation } from "@/hooks/hooks";
 import { useVerifyUserMutation } from "@/redux/api/api";
 import { useDispatch } from "react-redux";
+import { userExists } from "@/redux/reducers/auth";
   
  
 const FormSchema = z.object({
@@ -45,6 +46,8 @@ const OtpDialog = ({ verfied }) => {
 
     const [verifyUser, isLoading, userData] = useAsyncMutation(useVerifyUserMutation)
 
+    const dispatch = useDispatch()
+
     const form = useForm({
         resolver: zodResolver(FormSchema),
         defaultValues: {
@@ -59,12 +62,13 @@ const OtpDialog = ({ verfied }) => {
     useEffect(()=>{
         if(userData?.user?.verified){
             setOpenDialog(true)
+            dispatch(userExists(userData?.user))
         }
-    },[verifyUser])
+    },[userData])
 
   return (
     <Dialog open={!openDialog}>
-      <DialogContent className="h-1/2">
+      <DialogContent className="min-h-[20rem] max-h-[25rem]">
         <DialogHeader>
           <DialogTitle className="mb-10 text-2xl">Verify Your Account</DialogTitle>
           <DialogDescription>

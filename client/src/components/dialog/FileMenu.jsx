@@ -7,6 +7,8 @@ import { Button } from "../ui/button";
 import { setIsFileMenu, setUploadingLoader } from "@/redux/reducers/misc";
 import toast from "react-hot-toast";
 import { useSendAttachmentsMutation } from "@/redux/api/api";
+import { ScrollArea } from "../ui/scroll-area";
+
 
 const FileMenu = ({chatId}) => {
 
@@ -71,8 +73,8 @@ const FileMenu = ({chatId}) => {
       <PopoverTrigger asChild>
         <Paperclip/>
       </PopoverTrigger>
-      <PopoverContent>
-        <Button variant="outline" onClick={selectImage}>
+      <PopoverContent className="text-white">
+        <Button className="bg-white w-full border-none bg-opacity-0" variant="outline" onClick={selectImage}>
           <ImageIcon />
           <p className="px-2">Image</p>
           <input
@@ -84,7 +86,7 @@ const FileMenu = ({chatId}) => {
             ref={imageRef}
           />
         </Button>
-        <Button variant="outline" onClick={selectAudio}>
+        <Button className="bg-white w-full border-none bg-opacity-0" variant="outline" onClick={selectAudio}>
           <AudioLines/>
           <p className="px-2">Audio</p>
           <input
@@ -96,7 +98,7 @@ const FileMenu = ({chatId}) => {
             ref={audioRef}
           />
         </Button>
-        <Button variant="outline" onClick={selectVideo}>
+        <Button className="bg-white w-full border-none bg-opacity-0" variant="outline" onClick={selectVideo}>
           <VideoIcon/>
           <p className="px-2">Video</p>
           <input
@@ -108,7 +110,7 @@ const FileMenu = ({chatId}) => {
             ref={videoRef}
           />
         </Button>
-        <Button variant="outline" onClick={selectFile}>
+        <Button className="bg-white w-full border-none bg-opacity-0" variant="outline" onClick={selectFile}>
           <FileUpIcon/>
           <p className="px-3">Files</p>
           <input

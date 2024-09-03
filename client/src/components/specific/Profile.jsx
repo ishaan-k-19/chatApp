@@ -108,15 +108,15 @@ const Profile = ({ user, otherUser, chatId }) => {
   return (
     <>
       {isEdit ? (
-        <Card className="h-[100svh] md:h-[calc(100vh-8rem)] md:m-3">
+        <Card className="h-[100svh] md:h-[calc(100svh-8rem)] md:m-3">
           <form
-            className="flex flex-col gap-4"
+            className="flex flex-col gap-4 xl:gap-4"
             onSubmit={handleSubmit(handleEditProfile)}
           >
             <CardHeader>
               <CardTitle>
                 {edit ? (
-                  <div className="flex justify-between">
+                  <div className="flex justify-between items-center">
                     Edit Profile
                     <div className="flex items-center gap-5">
                       <Button type="submit" variant="icon" disabled={isLoading}>
@@ -129,8 +129,9 @@ const Profile = ({ user, otherUser, chatId }) => {
                 )}
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="flex flex-col gap-8 md:gap-10 xl:gap-8 items-center mt-4 justify-center">
+            <CardContent className="flex flex-col items-center gap-2">
+              <ScrollArea className="md:h-[calc(100svh-12.5rem)] h-[65svh] ">
+              <div className="flex flex-col gap-5 xl:gap-8 items-center mt-4 justify-center">
                 <div className="flex flex-col items-center justify-center relative">
                   {avatar.preview ? (
                     <img
@@ -139,7 +140,7 @@ const Profile = ({ user, otherUser, chatId }) => {
                       alt="Avatar Preview"
                     />
                   ) : (
-                    <Avatar className="w-[150px] h-[150px] object-cover my-4 shadow-lg">
+                    <Avatar className="w-[150px] h-[150px] md:w-[130px] md:h-[130px]  object-cover md:my-0 xl:my-4 my-4 shadow-lg">
                       <AvatarImage
                         className="object-cover"
                         src={transformImage(mainUser?.avatar?.url, 500)}
@@ -163,7 +164,9 @@ const Profile = ({ user, otherUser, chatId }) => {
                 <ProfileCard
                   heading={"Username"}
                   show={true}
+             isEdit={true}
                   element={
+
                     <input
                       className="border mx-2 rounded-sm py-1 text-center dark:bg-neutral-900 dark:text-white dark:border-neutral-700 bg-neutral-100"
                       type="text"
@@ -174,12 +177,14 @@ const Profile = ({ user, otherUser, chatId }) => {
                       }
                     />
                   }
-                  Icon={<AtSign />}
+                  Icon={<AtSign size={19} />}
                 />
                 <ProfileCard
                   show={true}
                   heading={"Name"}
+             isEdit={true}
                   element={
+
                     <input
                       className="border mx-2 rounded-sm py-1 text-center dark:bg-neutral-900 dark:text-white dark:border-neutral-700 bg-neutral-100"
                       type="text"
@@ -190,12 +195,14 @@ const Profile = ({ user, otherUser, chatId }) => {
                       }
                     />
                   }
-                  Icon={<UserIcon />}
+                  Icon={<UserIcon size={19} />}
                 />
                 <ProfileCard
                   heading={"Bio"}
                   show={true}
+             isEdit={true}
                   element={
+
                     <input
                       className="border mx-2 rounded-sm py-1 text-center dark:bg-neutral-900 dark:text-white dark:border-neutral-700 bg-neutral-100"
                       type="text"
@@ -206,16 +213,17 @@ const Profile = ({ user, otherUser, chatId }) => {
                       }
                     />
                   }
-                  Icon={<MessageSquareText />}
+                  Icon={<MessageSquareText size={19} />}
                 />
               </div>
-            </CardContent>
+            </ScrollArea>
             <ChangePasswordDialog />
+            </CardContent>
           </form>
         </Card>
       ) : isGroup ? (
         <>
-          <Card className=" h-[100svh] md:h-[calc(100vh-8rem)] md:m-3">
+          <Card className=" h-[100svh] md:h-[calc(100svh-8rem)] md:m-3">
             <CardHeader>
               <CardTitle>
                 <div className="flex gap-2 items-center">
@@ -233,8 +241,9 @@ const Profile = ({ user, otherUser, chatId }) => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-col gap-4 xl:gap-8 items-center mt-4">
-                <Avatar className="w-[150px] h-[150px] object-cover my-4 shadow-lg">
+            <ScrollArea className="md:h-[calc(100svh-12.5rem)] h-[75svh]">
+              <div className="flex flex-col gap-2 items-center mt-4 mb-5">
+                <Avatar className="w-[150px] h-[150px] md:w-[130px] md:h-[130px]  object-cover md:my-0 xl:my-4 my-4 shadow-lg">
                   <a href={mainUser?.avatar?.url} target="blank">
                     <AvatarImage
                       className="object-cover"
@@ -245,7 +254,7 @@ const Profile = ({ user, otherUser, chatId }) => {
                 <ProfileCard
                   heading={"Group Name"}
                   element={mainUser?.name}
-                  Icon={<UserRound />}
+                  Icon={<UserRound size={19} />}
                 />
                 <ProfileCard
                   heading={"Admin"}
@@ -265,21 +274,23 @@ const Profile = ({ user, otherUser, chatId }) => {
                 <ProfileCard
                   heading={"Participiants"}
                   element={`${mainUser?.members?.length} Members`}
-                  Icon={<UsersIcon />}
+                  Icon={<UsersIcon size={19} />}
                   handler={membersDialogHandler}
                 />
                 <ProfileCard
                   heading={"Created"}
-                  element={moment(mainUser?.createdAt).fromNow()}
-                  Icon={<Calendar />}
+                  element={moment(mainUser?.createdAt).format("D MMM, YYYY")}
+                  Icon={<Calendar size={19} />}
+                  show={true}
                 />
               </div>
+            </ScrollArea>
             </CardContent>
           </Card>
         </>
       ) : (
         <>
-          <Card className="h-[100svh] md:h-[calc(100vh-8rem)] md:m-3">
+          <Card className="h-[100svh] md:h-[calc(100svh-8rem)] md:m-3">
             <CardHeader>
               <CardTitle>
                 <div className="flex gap-2 items-center">
@@ -319,8 +330,9 @@ const Profile = ({ user, otherUser, chatId }) => {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-col gap-10 md:gap-4 xl:gap-6 items-center mt-4">
-                <Avatar className="w-[150px] h-[150px] object-cover my-4 shadow-lg">
+              <ScrollArea className="md:h-[calc(100svh-12.5rem)] h-[75svh] ">
+              <div className="flex flex-col gap-2 items-center mt-4">
+                <Avatar className="w-[150px] h-[150px] md:w-[130px] md:h-[130px] object-cover shadow-lg">
                   <a href={mainUser?.avatar?.url} target="blank">
                     <AvatarImage
                       className="object-cover"
@@ -331,36 +343,37 @@ const Profile = ({ user, otherUser, chatId }) => {
                 <ProfileCard
                   heading={"Username"}
                   element={mainUser?.username}
-                  Icon={<AtSign />}
+                  Icon={<AtSign size={19} />}
                   show={edit}
                 />
                 <ProfileCard
                   heading={"Name"}
                   element={mainUser?.name}
-                  Icon={<UserIcon />}
+                  Icon={<UserIcon size={19} />}
                   show={edit}
                 />
                 <ProfileCard
                   heading={"Bio"}
                   element={mainUser?.bio}
-                  Icon={<MessageSquareText />}
-                  show={edit}
+                  Icon={<MessageSquareText size={19} />}
+                  show={true}
                 />
                 {edit && (
                   <ProfileCard
                     heading={"Email"}
                     element={mainUser?.email}
-                    Icon={<MailIcon />}
+                    Icon={<MailIcon size={19} />}
                     show={edit}
                   />
                 )}
                 <ProfileCard
                   heading={"Joined"}
-                  element={moment(mainUser?.createdAt).fromNow()}
-                  Icon={<Calendar />}
-                  show={edit}
+                  element={moment(mainUser?.createdAt).format("D MMM, YYYY")}
+                  Icon={<Calendar size={19} />}
+                  show={true}
                 />
               </div>
+              </ScrollArea>
             </CardContent>
           </Card>
         </>
@@ -374,26 +387,26 @@ const Profile = ({ user, otherUser, chatId }) => {
   );
 };
 
-const ProfileCard = ({ element, Icon, heading, handler, show = false }) => (
+const ProfileCard = ({ element, Icon, heading, handler, show = false, isEdit }) => (
   <Button
-    className="grid grid-cols-3 items-center md:w-2/3 cursor-default gap-24 md:gap-5 2xl:gap-0"
+    className={`grid grid-cols-3 items-center -ml-16 md:-ml-3 ${isEdit && "ml-0"} w-2/3 cursor-default gap-5 h-auto`}
     variant="icon"
     onClick={handler}
     type="button"
   >
-    <div className="flex justify-center md:justify-center">{Icon && Icon}</div>
+    <div className={`flex ${isEdit ? "md:justify-center -ml-10 md:ml-0" : "justify-end"}`}>{Icon && Icon}</div>
     <div className="flex flex-col">
-      <div className="flex flex-col items-center">
+      <div className={`flex flex-col ${isEdit ? "items-center" : "items-start"}`}>
         <p
           className={`${
             show
-              ? "text-lg"
+              ? "text-lg md:w-[14ch] md:whitespace-pre-wrap md:break-words text-start"
               : "text-lg max-w-none overflow-visible md:max-w-[9ch] md:overflow-hidden md:whitespace-nowrap md:text-ellipsis"
           }`}
         >
           {element}
         </p>
-        <p className="text-sm text-neutral-400">{heading}</p>
+        <p className="text-[12px] text-neutral-400 -mt-[5px]">{heading}</p>
       </div>
     </div>
   </Button>
@@ -421,7 +434,7 @@ const MembersDialog = ({ openDialog, setOpenDialog, user }) => {
               .reverse()
               .map((i) => (
                 <>
-                  <div className="flex gap-10 items-center p-2 mt-1">
+                  <div className="flex gap-3 items-center p-2 mt-1">
                     <Avatar className="h-[50px] w-[50px]">
                       <AvatarImage
                         className="object-cover shadow-lg"
@@ -431,8 +444,8 @@ const MembersDialog = ({ openDialog, setOpenDialog, user }) => {
                     <div className="flex items-center justify-between w-full">
                       <div className="flex-col">
                         <p>{i?.name}</p>
-                        <div className="flex gap-[2px] items-center dark:text-neutral-500 text-neutral-400">
-                          <AtSignIcon size={13} />
+                        <div className="flex gap-[2px] items-center dark:text-neutral-500 text-neutral-400 -mt-1 text-[12px]">
+                          <AtSignIcon size={12} />
                           <p>{i?.username}</p>
                         </div>
                       </div>

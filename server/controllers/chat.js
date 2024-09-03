@@ -52,36 +52,51 @@ const newGroupChat = TryCatch(async (req, res, next) => {
     })
 });
 const getMyChats = TryCatch(async (req, res, next) => {
-
     const chats = await Chat.find({ members: req.user }).populate(
         "members",
         "name avatar"
     );
 
-    const transformedChats = chats.map(({_id, name, members, groupChat, avatar}) => {
+    const chatMessages = await Promise.all(
+        chats.map(async (chat) => {
+            const latestMessage = await Message.findOne({ chat: chat._id })
+                .sort({ createdAt: -1 })
+                .select("createdAt");
+            return {
+                chat,
+                latestMessage: latestMessage ? latestMessage.createdAt : new Date(0), // Use a very old date if no messages
+            };
+        })
+    );
 
+    // Sort chats based on the latest message timestamp
+    chatMessages.sort((a, b) => b.latestMessage - a.latestMessage);
+
+    // Transform sorted chats
+    const transformedChats = chatMessages.map(({ chat }) => {
+        const { _id, name, members, groupChat, avatar } = chat;
         const otherMember = getOtherMembers(members, req.user);
-
 
         return {
             _id,
             groupChat,
             avatar: groupChat ? [avatar.url] : [otherMember.avatar.url],
             name: groupChat ? name : otherMember.name,
-            members : members.reduce((prev, curr)=>{
-                if (curr._id.toString() !== req.user.toString()){
-                    prev.push(curr._id)
+            members: members.reduce((prev, curr) => {
+                if (curr._id.toString() !== req.user.toString()) {
+                    prev.push(curr._id);
                 }
                 return prev;
             }, []),
-        }
-    })
+        };
+    });
 
     return res.status(200).json({
         success: true,
         chats: transformedChats,
-    })
+    });
 });
+
 
 const getMyGroups = TryCatch(async (req, res, next) => {
   const chats = await Chat.find({

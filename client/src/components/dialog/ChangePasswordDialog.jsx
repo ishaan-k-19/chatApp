@@ -56,9 +56,9 @@ const ChangePasswordDialog = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="dark:border-neutral-600 mt-14 2xl:mt-20 w-1/2 self-center py-5 dark:bg-neutral-700">Change Password</Button>
+        <Button className="dark:border-neutral-600 mt-0 md:mt-0 2xl:mt-20 w-1/2 self-center py-5 dark:bg-neutral-700">Change Password</Button>
       </DialogTrigger>
-      <DialogContent className="h-1/2 w-full">
+      <DialogContent className="max-h-[25rem] min-h-[23rem] w-full">
         <DialogHeader>
           <DialogTitle>Change Password</DialogTitle>
         </DialogHeader>

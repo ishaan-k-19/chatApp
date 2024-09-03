@@ -1,7 +1,7 @@
 // If using an inline SVG
 const MyIcon = () => (
     <svg
-      className="w-12 h-12 text-[#6d28d9] dark:text-white"
+      className="md:min-w-12 md:h-12 min-w-8 h-8 text-[#6d28d9] dark:text-white"
       viewBox="0 0 32 32"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

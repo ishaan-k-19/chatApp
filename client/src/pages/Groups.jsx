@@ -200,7 +200,7 @@ const Groups = () => {
   const IconBtns = (
     <>
       <Button
-        className="px-2 rounded-full m-3 fixed right-4 block md:hidden top-4 md:top-2"
+        className="px-2 rounded-full mx-3 fixed right-0 block md:hidden top-4 md:top-2"
         onClick={handleMobile}
       >
         <MenuIcon />
@@ -210,7 +210,7 @@ const Groups = () => {
         <Tooltip>
           <TooltipTrigger>
             <Button
-              className={`px-2 rounded-full fixed  m-3 top-4 md:top-2 md:relative ${
+              className={`px-2 rounded-full fixed mx-3 top-4 md:top-2 md:relative ${
                 theme === "dark" ||
                 (theme === "system" && systemTheme === "dark")
                   ? "bg-neutral-700 hover:bg-neutral-600"
@@ -235,12 +235,12 @@ const Groups = () => {
           <div className="flex flex-col items-center justify-center relative">
             {avatar.preview ? (
               <img
-                className="h-[130px] w-[130px] rounded-full object-cover my-2"
+                className="h-[130px] w-[130px] rounded-full object-cover"
                 src={avatar.preview}
                 alt="Avatar Preview"
               />
             ) : (
-              <Avatar className="w-[130px] h-[130px] object-cover my-4 shadow-lg">
+              <Avatar className="w-[110px] h-[110px] object-cover mb-1 shadow-lg">
                 <AvatarImage
                   className="object-cover"
                   src={transformImage(groupData?.chat?.avatar?.url, 500)}
@@ -263,7 +263,7 @@ const Groups = () => {
           <div className="flex items-center">
 
         <input
-            className={"border md:text-4xl text-2xl mx-2 rounded-sm py-2 text-center dark:bg-neutral-900 dark:text-white dark:border-neutral-700 bg-neutral-100"}
+            className={"border mx-2 rounded-sm py-2 text-center dark:bg-neutral-900 dark:text-white dark:border-neutral-700 bg-neutral-100"}
             type="text"
             value={groupNameUpdatedValue}
             onChange={(e) => setGroupNameUpdatedValue(e.target.value)}
@@ -280,7 +280,7 @@ const Groups = () => {
         </>
       ) : (
         <>
-          <Avatar className="w-[130px] h-[130px] object-cover my-4 shadow-lg">
+          <Avatar className="w-[110px] h-[110px] object-cover shadow-lg">
             <a href={groupData?.chat?.avatar?.url} target="blank">
               <AvatarImage
                 className="object-cover"
@@ -288,8 +288,8 @@ const Groups = () => {
               />
             </a>
           </Avatar>
-          <div className="flex ml-10">
-            <h4 className="md:text-4xl text-2xl font-bold">{groupName}</h4>
+          <div className="flex ml-[60px]">
+            <h4 className=" text-2xl">{groupName}</h4>
             <Button
               variant="outlined"
               onClick={() => setIsEdit(true)}
@@ -308,16 +308,15 @@ const Groups = () => {
   );
 
   const ButtonGroup = (
-    <div className="flex gap-4 justify-center my-3">
+    <div className="flex gap-4 justify-center my-3 flex-col-reverse items-center md:flex-row">
       <Button
-        className="text-red-500 border border-neutral-200 dark:border-red-500"
+        className="text-red-500 border border-neutral-200 dark:border-red-500 w-1/2 md:w-auto"
         variant="outlined"
         onClick={openConfirmDeleteHandler}
       >
         <Trash2 className="w-5 mx-1" /> Delete Group
       </Button>
-      <Button onClick={openAddMemberHandler}>
-        {" "}
+      <Button onClick={openAddMemberHandler} className="w-1/2 md:w-auto">
         <PlusIcon className="w-5 mx-1" />
         Add Member
       </Button>
@@ -327,7 +326,7 @@ const Groups = () => {
   return myGroups.isLoading ? (
     <LayoutSkeleton />
   ) : (
-    <div className="relative h-[100vh]">
+    <div className="relative h-[100svh] xl:mb-0 mb-0">
       <div className="grid grid-cols-12 h-full gap-4 md:p-4">
         <Card className={`h-full md:py-3 md:block col-span-12 md:col-span-4 ${chatId ? "hidden md:block" : "block"}`}>
           <div className="md:hidden block">
@@ -340,7 +339,7 @@ const Groups = () => {
             </Button>
           </div>
           <CardHeader>
-            <CardTitle className={"text-3xl text-center font-bold mt-8"}>
+            <CardTitle className={"text-3xl text-center font-bold mb-4 mt-1 md:mt-0"}>
               Manage Groups
             </CardTitle>
           </CardHeader>
@@ -350,13 +349,14 @@ const Groups = () => {
         </Card>
         <Card className={`col-span-12 md:col-span-8 h-full block ${chatId ? "block" : "hidden md:block"}`}>
           {IconBtns}
-          {groupName && (
+          {groupName ? (
             <>
               <CardHeader className="block p-3">{GroupName}</CardHeader>
               <CardContent>
-                  <ScrollArea className="h-[53vh] md:h-[50vh]">
+                
+                  <ScrollArea className="h-[50vh] md:h-[calc(100vh-20rem)]">
                 <div className="flex w-full justify-center">
-                  <div className="flex flex-col list-none md:max-w-[45rem] w-full box-border p-4 gap-4 md:mx-4">
+                  <div className="flex flex-col list-none md:max-w-[45rem] w-full box-border px-4 py-2 gap-[4px] md:mx-4">
                     {isLoadingRemoveMember ? (
                       <Skeleton />
                     ) : (
@@ -370,8 +370,8 @@ const Groups = () => {
                             (theme === "system" && systemTheme === "light")
                               ? {
                                   boxShadow: "0 0 0.5rem rgba(0, 0, 0, 0.2)",
-                                  padding: "0.1rem 2.5rem",
-                                  borderRadius: "1rem",
+                                  padding: "0rem 2rem",
+                                  borderRadius: "0.5rem",
                                   gap: "0",
                                   justifyContent: "space-between",
                                   
@@ -379,8 +379,8 @@ const Groups = () => {
                               : {
                                   backgroundColor: `#262626`,
                                   boxShadow: "0 0 0.5rem rgba(0, 0, 0, 0.2)",
-                                  padding: "0.1rem 2.5rem",
-                                  borderRadius: "1rem",
+                                  padding: "0rem 2rem",
+                                  borderRadius: "0.5rem",
                                   gap: "0",
                                   justifyContent: "space-between",
                                 }
@@ -396,7 +396,7 @@ const Groups = () => {
               </CardContent>
               <CardFooter>{ButtonGroup}</CardFooter>
             </>
-          )}
+          ) : (<p className="flex justify-center text-2xl mt-28">Please Select a Group to Manage</p>)}
         </Card>
       </div>
 
@@ -468,7 +468,7 @@ const GroupListItem = memo(({ group, chatId }) => {
       }}
     >
       <div
-        className="p-2 md:p-0 md:px-10"
+        className="p-2 md:p-0 md:px-2 mx-2"
         style={{
           display: "flex",
           gap: "1rem",
@@ -484,10 +484,10 @@ const GroupListItem = memo(({ group, chatId }) => {
           boxShadow: chatId === _id ? "0 0 0.5rem rgba(0, 0, 0, 0.2)" : "unset",
         }}
       >
-        <Avatar className="object-cover md:my-3 shadow-lg border">
+        <Avatar className="object-cover md:my-2 shadow-lg">
           <AvatarImage className="object-cover" src={transformImage(avatar)} />
         </Avatar>
-        <h5 className="font-bold md:text-xl text-base">{name}</h5>
+        <h5 className="md:text-lg text-base">{name}</h5>
       </div>
     </Link>
     

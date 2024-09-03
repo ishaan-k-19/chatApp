@@ -37,7 +37,8 @@ const onlineUsers = new Set();;
 
 const io = new Server( server, {
     cors: corsOptions,
-});
+}
+);
 
 app.set("io", io);
 
@@ -69,6 +70,7 @@ io.use((socket, next)=>{
         socket.request.res, 
         async (err)=>{ 
           await socketAuthenticator(err, socket, next)
+          console.log(err)
         }
     );
 })

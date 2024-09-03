@@ -15,7 +15,7 @@ const UserItem = ({user, handler, handlerIsLoading, isAdded = false, styling, us
     <li>
         <div className="flex items-center justify-between" style={{...styling}}>
             <div className='flex gap-2 items-center'>
-            <Avatar className='object-cover my-4 shadow-lg border'>
+            <Avatar className='object-cover my-[10px] shadow-lg border'>
                 <AvatarImage className='object-cover' src={transformImage(newAvatar)}/>
             </Avatar>
             <div className='-space-y-1'>

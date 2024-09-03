@@ -77,7 +77,7 @@ const Search = () => {
               {isLoadingSendFriendRequest ? (
                 <ChatListSkeleton />
               ) : (
-                <ScrollArea className="h-[47svh] 2xl:h-[50svh] scroll-smooth w-full px-3">
+                <ScrollArea className="h-[calc(100svh-24rem)] md:h-[calc(100vh-24rem)] scroll-smooth w-full px-3">
                   {users.length === 0
                     ? <p className="text-center mt-20 text-lg">No results found</p>
                     : users.map((i) => (

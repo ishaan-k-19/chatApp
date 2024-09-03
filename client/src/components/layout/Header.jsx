@@ -81,7 +81,7 @@ const Header = () => {
         withCredentials: true,
       })
       dispatch(userNotExists());
-      toast.success(data.message, { id: toastId });
+      toast.success(data.message, {id: toastId});
 
     } catch (error) {
       toast.error(error?.response?.data?.message || "Something went wrong", { id: toastId });
@@ -98,7 +98,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="md:hidden flex flex-col items-start gap-10 mt-10 md:disabled:">
+      <div className="md:hidden flex flex-col items-start gap-7 mt-10 md:disabled:">
         <TooltipProvider>
           <IconBtn
             title={"Search"}
@@ -142,13 +142,12 @@ const Header = () => {
       </div>
       <Card className="md:mx-3 md:my-2 md:block hidden">
         <CardHeader className="px-9 py-1">
-          <CardTitle>
+          <CardTitle className="">
             <nav className="h-[4rem] grid grid-cols-12 items-center">
               <div className="col-span-6 md:col-span-2 text-[#6d28d9]">
                 <div className="flex gap-1 items-center">
-                <Logo />
+                <Logo className="w-full"/>
               <h1 className="text-2xl font-extrabold leading-none tracking-tight md:text-3xl lg:text-4xl dark:text-white">ConvoCube</h1>
-
                 </div>
                 <Button
                   className="shadow-xl rounded-full px-2 md:hidden"
@@ -231,7 +230,7 @@ const IconBtn = ({ title, icon, onClick, value }) => {
     <Tooltip>
       <TooltipTrigger>
         <div className="flex items-center gap-5" onClick={onClick}>
-        <Button className="shadow-xl rounded-full px-2" onClick={onClick}>
+        <Button className="shadow-xl rounded-full px-2">
           {value ? (
             <div className="relative">
               <Badge className="absolute -top-3" variant="destructive">

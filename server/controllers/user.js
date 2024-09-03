@@ -11,21 +11,18 @@ import { getOtherMembers } from "../lib/helper.js";
 
 // Create a new user and save it to the database and save in cookie
 const newUser = TryCatch(async (req, res, next) => {
-
     const { name, email, username, password, bio } = req.body;
-
     const file = req.file;
 
-    if (!file) return next(new ErrorHandler("Please upload your picture"))
+    if (!file) return next(new ErrorHandler("Please upload your picture"));
 
     const otp = Math.floor(100000 + Math.random() * 900000);
-
     const result = await uploadFilesToCloudinary([file]);
 
     const avatar = {
         public_id: result[0].public_id,
         url: result[0].url,
-    }
+    };
 
     const user = await User.create({
         name,
@@ -35,13 +32,31 @@ const newUser = TryCatch(async (req, res, next) => {
         password,
         avatar,
         otp,
-        otp_expiry: new Date(Date.now() + 5 * 60 * 1000)
+        otp_expiry: new Date(Date.now() + 5 * 60 * 1000),
     });
 
-    await sendMail(email, "Verify your account", `Your OTP is ${otp}`);
+    const htmlMessage = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px;">
+            <h2 style="color: #333;">Dear ${name},</h2>
+            <p>Thank you for registering with ConvoCube! To complete your account verification, please use the following One-Time Password (OTP):</p>
+            <div style="background-color: #f8f8f8; padding: 10px; border-radius: 5px; text-align: center;">
+                <p style="font-size: 24px; font-weight: bold; color: #555;">Your OTP Code: <span style="color: #007bff;">${otp}</span></p>
+            </div>
+            <p>This code is valid for the next <strong>5 minutes</strong>. Please enter it in the app to verify your account.</p>
+            <p>If you did not request this code, please ignore this email. Your account will remain secure.</p>
+            <hr style="border: 1px solid #e0e0e0; margin: 20px 0;">
+            <p style="font-size: 14px; color: #777;">Why am I receiving this email?</p>
+            <p style="font-size: 14px; color: #777;">You received this email because an account was registered using this email address on ConvoCube. If this was not you, please ignore this email.</p>
+            <p style="font-size: 14px; color: #777;">Thank you for choosing ConvoCube.</p>
+            <p style="font-size: 14px; color: #777;">Best regards,<br>The ConvoCube Team</p>
+        </div>
+    `;
+
+    await sendMail(email, "Verify Your Account: Your OTP For Registration", htmlMessage);
 
     sendToken(res, user, 201, "User created successfully");
 });
+
 
 const verify = TryCatch(async (req, res, next) => {
 
@@ -370,7 +385,6 @@ const resetPassword = TryCatch(async (req, res, next) => {
 )
 
 const forgetPassword = TryCatch(async (req, res, next) => {
-
     const { email } = req.body;
 
     const user = await User.findOne({ email: email });
@@ -381,20 +395,33 @@ const forgetPassword = TryCatch(async (req, res, next) => {
 
     const otp = Math.floor(100000 + Math.random() * 900000);
 
-
-    user.resetPasswordOtp = otp
+    user.resetPasswordOtp = otp;
     user.resetPasswordOtp_expiry = Date.now() + 10 * 60 * 1000;
 
     await user.save();
 
-    const message = `Your OTP for reseting the password is ${otp}. If you did not request for this, please igonore this email.`
+    const htmlMessage = `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #f0f0f0; border-radius: 10px;">
+            <h2 style="color: #333;">Dear ${user.name},</h2>
+            <p>We received a request to reset the password for your ConvoCube account. To proceed with resetting your password, please use the following One-Time Password (OTP):</p>
+            <div style="background-color: #f8f8f8; padding: 10px; border-radius: 5px; text-align: center;">
+                <p style="font-size: 24px; font-weight: bold; color: #555;">Your OTP Code: <span style="color: #007bff;">${otp}</span></p>
+            </div>
+            <p>This code is valid for the next <strong>5 minutes</strong>. Please enter it in the app to reset your password.</p>
+            <p>If you did not request a password reset, you can safely ignore this email—your account will remain secure.</p>
+            <hr style="border: 1px solid #e0e0e0; margin: 20px 0;">
+            <p style="font-size: 14px; color: #777;">Why am I receiving this email?</p>
+            <p style="font-size: 14px; color: #777;">You received this email because someone requested a password reset for an account associated with this email address on ConvoCube. If this was not you, please ignore this email.</p>
+            <p style="font-size: 14px; color: #777;">Thank you for being a part of ConvoCube.</p>
+            <p style="font-size: 14px; color: #777;">Best regards,<br>The ConvoCube Team</p>
+        </div>
+    `;
 
-    await sendMail(email, "Request for Reseting Password", message);
+    await sendMail(email, "Password Reset Request for Your ConvoCube Account", htmlMessage);
 
     res.status(200).json({ success: true, message: `OTP sent to ${email}` });
+});
 
-}
-)
 
 
 

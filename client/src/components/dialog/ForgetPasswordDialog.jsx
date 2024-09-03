@@ -45,7 +45,7 @@ useEffect(()=>{
       <DialogTrigger className='text-[13px] ml-2 underline text-indigo-500 dark:text-neutral-400'>
             Forgot Password?
       </DialogTrigger>
-      <DialogContent className="h-2/5 w-full">
+      <DialogContent className="min-h-[15rem] max-h-[20rem] mx w-full">
         <DialogHeader>
           <DialogTitle>Reset Password</DialogTitle>
         </DialogHeader>
@@ -103,7 +103,7 @@ const ResetPasswordDialog = ({openDialog, setOpenDialog}) =>{
 
     return (
         <Dialog open={openDialog} onOpenChange={closeHandler}>
-          <DialogContent className="h-2/3 w-full">
+          <DialogContent className="max-h-[30rem] min-h-[25rem] w-full">
             <DialogHeader>
               <DialogTitle>Reset Password</DialogTitle>
             </DialogHeader>

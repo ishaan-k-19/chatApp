@@ -2,6 +2,9 @@ import { memo } from 'react';
 import { Link } from '../styles/StyledComponents';
 import { useTheme } from '../ui/theme-provider';
 import AvatarCard from './AvatarCard';
+import { Avatar, AvatarImage } from '../ui/avatar';
+import { transformImage } from '@/lib/features';
+import { Separator } from '../ui/separator';
 
 const ChatItem = ({
   avatar = [],
@@ -17,24 +20,26 @@ const ChatItem = ({
 
 
   return (
+    <>
     <Link className='hover:bg-[#7b39ed] hover:bg-opacity-45 rounded-lg mx-2' to={`/chat/${_id}`}>
       <div
-        className='rounded-lg'
+        className='rounded-lg md:gap-[1px] gap-3'
         style={{
           display: 'flex',
-          gap: '1rem',
           alignItems: 'center',
-          padding: '0.6rem 0rem',
-          margin: '5px 0px',
+          padding: '0.4rem 0rem',
+          margin: '2px 0px',
           backgroundColor: sameSender ? '#7b39ed' : 'unset',
           color: sameSender || theme === 'dark' || theme === 'system' && systemTheme === 'dark' ? 'white' : 'unset',
           position: 'relative',
         }}
       >
-        <AvatarCard avatars={avatar}/>
+        <Avatar className="object-cover md:my-2 md:ml-2 ml-10 shadow-lg">
+          <AvatarImage className="object-cover" src={transformImage(avatar[0])} />
+        </Avatar>
 
         <div className="flex-col flex">
-          <h5 className='text-xl mx-2'>{name}</h5>
+          <h5 className='text-lg mx-2'>{name}</h5>
           {newMessageAlert && (
             <h6 className='text-lg'>{newMessageAlert.count} New Message</h6>
           )}
@@ -46,6 +51,7 @@ const ChatItem = ({
         )}
       </div>
     </Link>
+    </>
   );
 };
 

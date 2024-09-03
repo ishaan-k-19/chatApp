@@ -1,6 +1,4 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import ChatItem from "../shared/ChatItem";
-import { Button } from "../ui/button";
 import {
   Sheet,
   SheetContent,
@@ -11,8 +9,15 @@ import {
 } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
 import Header from "../layout/Header";
+import ChatItem from "../shared/ChatItem";
+import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
+import Logo from "@/assets/logo";
+import { useDispatch } from "react-redux";
+import { setIsSearch } from "@/redux/reducers/misc";
 import { Separator } from "../ui/separator";
+
+
 
 const ChatList = ({
   w = "100%",
@@ -28,18 +33,31 @@ const ChatList = ({
   handleDeleteChat,
 }) => {
 
+  const dispatch= useDispatch()
+
   return (
     <Card className="h-[100svh] md:h-[calc(100vh-8rem)] md:m-3">
       <CardHeader>
         <CardTitle className="md:block flex justify-between">
-          <p className="md:hidden block dark:text-white text-[#6d28d9] font-bold text-3xl">ConvoCube</p>
+          <div className="md:hidden flex  items-center">
+            <Logo/>
+            <p className=" dark:text-white text-[#6d28d9] font-bold text-3xl">ConvoCube</p>
+          </div>
           <p className="hidden md:block">Chats</p>
           <MenuItems/>
         </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col" style={{ width: { w } }}>
-          <ScrollArea className="h-[85svh] md:h-[calc(100vh-14rem)] md:mx-3 rounded-md">
+          <ScrollArea className="h-[78svh] md:h-[calc(100vh-12.5rem)] md:mx-3 rounded-md mt-5">
+            {chats?.length === 0 && (
+              <div className="text-center text-lg text-gray-500 mt-4 flex flex-col items-center gap-6">
+                No chats found
+                <Button className="w-2/5 dark:bg-neutral-900 text-neutral-500 bg-neutral-200" onClick={()=>dispatch(setIsSearch(true))}>
+                  Add Friends
+                </Button>
+              </div>
+            )}
             {chats?.map((data, index) => {
               const { avatar, _id, name, groupChat, members } = data;
 
@@ -52,6 +70,8 @@ const ChatList = ({
               );
 
               return (
+                <div className="flex flex-col">
+                
                 <ChatItem
                   key={_id}
                   index={index}
@@ -64,6 +84,8 @@ const ChatList = ({
                   sameSender={chatId === _id}
                   handleDeleteChat={handleDeleteChat}
                 />
+                <Separator className="my-2 dark:bg-neutral-800 self-center w-[95%] md:hidden"/>
+                </div>
               );
             })}
           </ScrollArea>

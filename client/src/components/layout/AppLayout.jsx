@@ -103,7 +103,7 @@ const AppLayout = () => (WrappedComponent) => {
         <div className="hidden md:block">
         <Header/>
         </div>
-        <div className="grid grid-cols-12">
+        <div className="grid grid-cols-12 ">
           {/* Chat List */}
           <div className={`
           ${chatId ? `col-span-12 md:col-span-3 lg:col-span-3 md:block hidden` : `col-span-12 md:col-span-6 lg:col-span-6 md:block`}
@@ -130,7 +130,7 @@ const AppLayout = () => (WrappedComponent) => {
           }
           {/* Profile */}
           <div className={`
-          ${isProfile ? "col-span-12 md:col-span-3 lg:col-span-3 block" : "hidden"}
+          ${isProfile ? "col-span-12 md:col-span-4 lg:col-span-3 block" : "hidden"}
           ${chatId ? `block col-span-12` : `hidden`}
           `}>
               <Profile user={user} otherUser={otherUser} chatId={chatId}/>

@@ -12,7 +12,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
     <Provider store={store}>
     <HelmetProvider>
-      <div onContextMenu={(e)=> e.preventDefault()}>
+      <div className='overflow-hidden' onContextMenu={(e)=> e.preventDefault()}>
           <App />
       </div>
     </HelmetProvider>
